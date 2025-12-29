@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tutudaka - 习惯打卡日历
 
-## Getting Started
+移动端优先的习惯打卡日历，用四角彩色圆点记录早起/早睡/点外卖/出去吃。
 
-First, run the development server:
+## 本地开发
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. 复制环境变量模板
+   ```bash
+   cp .env.example .env.local
+   ```
+2. 设置 `.env.local`
+   - `PASSWORD` 必填
+   - `BLOB_READ_WRITE_TOKEN` 本地可留空（会写入 `.local-data.json`）
+3. 启动开发服务器
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 `http://localhost:3000` 查看。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 本地数据说明
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+未配置 `BLOB_READ_WRITE_TOKEN` 时，开发环境会把数据写到项目根目录的 `.local-data.json`。该文件已加入 `.gitignore`，不会提交到仓库。
 
-## Learn More
+## 部署到 Vercel
 
-To learn more about Next.js, take a look at the following resources:
+在 Vercel 项目环境变量中设置：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `PASSWORD`
+- `BLOB_READ_WRITE_TOKEN`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+部署后数据会持久化到 Vercel Blob Storage。
 
-## Deploy on Vercel
+## API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /api/auth`：验证密码并写入 Cookie
+- `GET /api/auth/check`：检查登录状态
+- `GET /api/records`：获取所有打卡记录
+- `POST /api/records`：更新指定日期的任务状态
