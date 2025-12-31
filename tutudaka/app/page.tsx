@@ -8,26 +8,7 @@ import { TaskList } from "./components/TaskList";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { useRecords } from "./hooks/useRecords";
 import { toDateKey } from "./lib/date";
-import type { RecordMap, TaskKey } from "./types";
-
-const createMockRecords = (month: Date): RecordMap => {
-  const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-  const records: RecordMap = {};
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const current = new Date(month.getFullYear(), month.getMonth(), day);
-    const key = toDateKey(current);
-    const sample = Math.random() > 0.4;
-    records[key] = {
-      earlyWake: sample && Math.random() > 0.3,
-      earlySleep: sample && Math.random() > 0.5,
-      takeout: Math.random() > 0.7,
-      eatOut: Math.random() > 0.8,
-    };
-  }
-
-  return records;
-};
+import type { TaskKey } from "./types";
 
 export default function Home() {
   const today = useMemo(() => new Date(), []);
@@ -42,10 +23,8 @@ export default function Home() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string>();
 
-  const initialRecords = useMemo(() => createMockRecords(today), [today]);
-
+  // useRecords now automatically initializes from localStorage cache
   const { records, loading, error, needsAuth, toggleTask, refresh, setNeedsAuth } = useRecords({
-    initial: initialRecords,
     enabled: authed,
   });
 

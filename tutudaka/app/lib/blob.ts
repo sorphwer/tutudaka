@@ -83,6 +83,7 @@ export const writeRecords = async (records: RecordMap) => {
     contentType: "application/json",
     token,
     addRandomSuffix: false,
+    allowOverwrite: true,
   });
   return records;
 };
